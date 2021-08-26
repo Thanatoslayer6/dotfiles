@@ -1,0 +1,31 @@
+#!/bin/bash
+# This scripts listens to lofi from free streaming radios online
+declare -a instances=(
+    "Lauft FM (Hip-Hop & Lofi) - http://stream.laut.fm/lofi"
+    "Chillsky (Hip-Hop & Lofi) - https://lfhh.radioca.st/stream"
+    "Chilltrax (Electronic) - http://opml.radiotime.com/Tune.ashx?id=s122126"
+    "Energy 106 (Electronic) - http://opml.radiotime.com/Tune.ashx?id=s177389"
+    "Soundstorm (Electronic/Easy) - http://opml.radiotime.com/Tune.ashx?id=s113468"
+    "Ambient Sleeping Pill (Easy) - http://opml.radiotime.com/Tune.ashx?id=s190314"
+    "Dark Edge Radio (Indie) - http://opml.radiotime.com/Tune.ashx?id=s304142"
+    "Postrocks.me (Post rock) - http://postrocks.me:8000/listen.pls"
+    "DWWW 774 (News) - http://opml.radiotime.com/Tune.ashx?id=s167367"
+    "DZRH 666 (PH News) - http://opml.radiotime.com/Tune.ashx?id=s49650"
+    "103.5 K-Lite (90's & 2000s) - http://opml.radiotime.com/Tune.ashx?id=s2789"
+    "Stop All Radios"
+)
+
+choice=$(printf "%s\n" "${instances[@]}" | dmenu -i -l 10 -p "Select radio instance: ")
+
+case "$choice" in
+    "") echo "Exiting..." ; exit 0 ;;
+    "Stop All Radios") pkill -f mpv && notify-send "Stopping radio" ; exit 0 ;;
+    *) 
+        link=$(echo "$choice" | awk '{print $NF}')
+        if [ $(pidof mpv) ]; then
+            pkill -f mpv && notify-send "Stopping radio" ; exit 0
+        else
+            setsid -f mpv "$link" && notify-send "Playing" "$link" ; exit 0
+        fi
+    ;;
+esac

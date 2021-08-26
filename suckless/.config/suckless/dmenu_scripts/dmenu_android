@@ -1,0 +1,22 @@
+#!/bin/bash
+# Please install `simple-mtpfs` and mtp tools  before using this script
+mount_device(){
+    chosen_dev=$(echo $(simple-mtpfs -l) | dmenu -p "Choose a device to mount/unmount")
+    [[ -z $chosen_dev ]] && exit 0
+    chosen_dev_num=$(echo $chosen_dev | awk '{print substr($1, 1, length($1)-1)}')
+    [[ ! -z $(simple-mtpfs --device $chosen_dev_num ~/mnt) ]] && notify-send "Try again" "Android device is not found..." && exit 0
+    notify-send "$chosen_dev" "Android device mounted device on ~/mnt"
+    exit 0
+}
+
+unmount_device(){
+    if [ "$(fusermount -q -u ~/mnt ; printf "$?\n")" -eq 0 ]; then notify-send "Android device unmounted"; else notify-send "Failed to unmount Android device" "Please close apps that are using it..."; fi
+    exit 0
+}
+
+# Check if ~/mnt exists, then tell user to create it
+if [ ! -d ~/mnt ]; then notify-send "Directory not found" "Please create a directory called ~/mnt"; fi
+# Check if device is connected
+if [ -z $(simple-mtpfs -l) ]; then notify-send "No Android devices found" "Connect your device with MTP enabled" && exit 0; fi
+# Rest of the functions...
+if [ "$(mountpoint -q ~/mnt ; printf "$?\n")" -eq 0 ]; then unmount_device; else mount_device; fi

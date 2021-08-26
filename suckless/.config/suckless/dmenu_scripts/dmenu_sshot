@@ -1,0 +1,30 @@
+#!/bin/bash
+# Dependencies = maim, xclip and drawing (gnome paint app) for editing
+# Prnt Scrn = select a region this copies to clipboard
+actions=(
+    "Select a region | Copy to clipboard"
+    "Select a region | Save & Edit"
+    "Fullscreen | Copy to clipboard"
+    "Fullscreen | Save & Edit"
+)
+
+choice=$(printf "%s\n" "${actions[@]}" | dmenu -i -l 5 -p "Select option: ")
+
+case "$choice" in
+    "Select a region | Copy to clipboard") 
+        maim -sq | xclip -selection clipboard -t image/png -i
+    ;;
+    "Select a region | Save & Edit")
+        maim -sq | xclip -selection clipboard -t image/png -i && drawing -c 
+    ;;
+    "Fullscreen | Copy to clipboard")
+        maim -q | xclip -selection clipboard -t image/png -i
+    ;;
+    "Fullscreen | Save & Edit")
+        maim -q | xclip -selection clipboard -t image/png -i && drawing -c 
+    ;;
+    *)
+    exit 0
+    ;;
+esac
+

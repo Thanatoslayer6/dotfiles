@@ -1,0 +1,7 @@
+#!/bin/sh
+# Load Default Xresources file
+xrdb ${XDG_CONFIG_HOME}/X11/Xresources_dark
+# Window Manager and utilities
+xcompmgr &
+exec i3
+

@@ -1,0 +1,47 @@
+#!/bin/bash
+# An array of options to choose.
+
+declare -a options=(
+    "Logout"
+    "Shutdown"
+    "Reboot"
+    "Quit"
+)
+
+choice=$(printf '%s\n' "${options[@]}" | dmenu -i -p 'Power menu:' "${@}")
+
+case $choice in
+
+   "Logout")
+    if [[ "$(echo -e "No\nYes" | dmenu -i -p "${choice}?" "${@}" )" == "Yes" ]]; then
+	killall i3
+    else
+        echo -n "User chose not to logout." && exit 1
+    fi
+    ;;
+
+  "Shutdown")
+    if [[ "$(echo -e "No\nYes" | dmenu -i -p "${choice}?" "${@}" )" == "Yes" ]]; then
+        systemctl poweroff
+    else
+        echo -n "User chose not to shutdown." && exit 1
+    fi 
+    ;;
+  "Reboot")
+    if [[ "$(echo -e "No\nYes" | dmenu -i -p "${choice}?" "${@}" )" == "Yes" ]]; then
+        systemctl reboot
+    else
+        echo -n "User chose not to reboot." && exit 1
+    fi
+    ;;
+  "Quit")
+    if [[ "$(echo -e "No\nYes" | dmenu -i -p "${choice}?" "${@}" )" == "Yes" ]]; then
+        exit 0
+    else
+        echo -n "Exited..." && exit 1
+    fi
+    ;;
+  *)
+    exit 0
+    ;;
+esac

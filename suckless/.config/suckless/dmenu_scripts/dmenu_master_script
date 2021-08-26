@@ -1,0 +1,48 @@
+#!/bin/bash
+# Power - options for shutting down, reboot etc...
+# Watch - ytfzf command 
+declare -a options=(
+    "Android"
+    "Power"
+    "Radio"
+    "Rss Feed"
+    "Screenshot"
+    "Theme"
+    "VirtualBox"
+    "Watch"
+)
+
+choice=$(printf '%s\n' "${options[@]}" | dmenu -i -p 'Select script:' "${@}")
+
+case $choice in 
+
+    "Android")
+    exec "$XDG_CONFIG_HOME"/suckless/dmenu_scripts/dmenu_android
+    ;;
+    "Power")
+    exec "$XDG_CONFIG_HOME"/suckless/dmenu_scripts/dmenu_power
+    ;;
+    "Theme")
+    exec "$XDG_CONFIG_HOME"/suckless/dmenu_scripts/dmenu_theme
+    ;;
+    "Radio")
+    exec "$XDG_CONFIG_HOME"/suckless/dmenu_scripts/dmenu_radio
+    ;;
+    "Watch")
+    ytfzf -fD
+    ;;
+    "Rss Feed")
+    exec "$XDG_CONFIG_HOME"/suckless/dmenu_scripts/dmenu_rss
+    ;;
+    "VirtualBox")
+    exec "$XDG_CONFIG_HOME"/suckless/dmenu_scripts/dmenu_vbox
+    ;;
+    "Screenshot")
+    exec "$XDG_CONFIG_HOME"/suckless/dmenu_scripts/dmenu_sshot
+    ;;
+    *)
+	exit 0
+    ;;
+    
+esac
+

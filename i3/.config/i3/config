@@ -1,0 +1,173 @@
+# i3 config
+
+# Windows key & Alt_Left key
+set $mod Mod4
+set $alt Mod1
+
+# A p p e a r a n c e
+# Font for window titles, bar
+font pango:Anonymice Nerd Font, Icons 8
+#font pango:DejaVu Sans Mono 8
+
+# Borders and title bars
+default_border pixel 2
+hide_edge_borders smart
+
+# I n i t i a l i z a t i o n
+# Wallpaper
+exec --no-startup-id feh --bg-fill /home/${USER}/Pictures/Default.png --no-fehbg
+# Notification Daemon
+exec --no-startup-id dunst
+# Disk Daemon
+exec --no-startup-id udiskie
+# Playerctl Daemon
+exec --no-startup-id playerctld daemon
+
+# App Launcher
+bindsym Control+space exec --no-startup-id j4-dmenu-desktop
+
+# Scripts launcher
+bindsym $mod+space exec --no-startup-id "${XDG_CONFIG_HOME}/suckless/dmenu_scripts/dmenu_master_script"
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# D e f a u l t s
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+$alt+h split h
+
+# split in vertical orientation
+bindsym $mod+$alt+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+
+# switch to workspace
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape or $mod+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+# P r e f e r e n c e s
+bar {
+        status_command i3blocks -c "${XDG_CONFIG_HOME}/i3/i3blocks.conf"
+}
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Return exec alacritty
+
+# Keybindings for the apps I use...
+bindsym $mod+b exec librewolf
+bindsym $mod+$alt+b exec chromium --incognito
+bindsym $mod+n exec alacritty -e sfeed_curses $XDG_CONFIG_HOME/sfeed/feeds/*
+bindsym $mod+m exec alacritty -e cmus
+
+# File Managers
+bindsym Ctrl+e exec alacritty -e lfrun
+bindsym Ctrl+$alt+e exec pcmanfm
+
+# Lock the screen using btrlockscrn
+bindsym Ctrl+$alt+l exec betterlockscreen -l
+
+# Screenshot, install maim, xclip and drawing. Pause = Print Screen
+bindsym Pause exec maim -sq | xclip -selection clipboard -t image/png -i
+bindsym $mod+Pause exec maim -sq | xclip -selection clipboard -t image/png -i && drawing -c
+
+# Assign apps to their workspaces
+for_window [class="VirtualBox Machine"] move to workspace $ws3
+for_window [class="Spotify"] move to workspace $ws4
+for_window [class="projectM-pulseaudio"] move to workspace $ws4
+for_window [class="Caprine"] move to workspace $ws5
+for_window [class="Joplin"] move to workspace $ws6
+for_window [class="Drawing"] floating enable

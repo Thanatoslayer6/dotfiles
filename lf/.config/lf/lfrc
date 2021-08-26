@@ -1,0 +1,96 @@
+set previewer ~/.config/lf/preview
+set cleaner ~/.config/lf/cleaner
+set ratios 1:2:3
+set preview true
+set hidden true
+set drawbox true
+set icons true
+set ignorecase true
+
+# Open using 'xdg-open'
+cmd open ${{
+    case $(file --mime-type "$f" -bL) in
+        text/*|application/json) $EDITOR "$f";;
+        *) xdg-open "$f" ;;
+    esac
+}}
+
+# Make directory
+cmd mkdir ${{
+  printf "Directory Name: "
+  read ans
+  mkdir $ans
+}}
+
+# Make a file
+cmd mkfile ${{
+  printf "File Name: "
+  read ans
+  $EDITOR $ans
+}}
+
+# Make file executable and vice versa
+cmd chmodx ${{
+    if [[ -x "$f" ]] 
+    then
+     chmod -x "$f"
+     lf -remote 'send reload'
+    else
+     chmod +x "$f"
+     lf -remote 'send reload'
+    fi
+}}
+
+# Moving files into trash, requires `trash-cli` package
+cmd move_to_trash ${{
+  files=$(printf "$fx" | tr '\n' ';')
+  while [ "$files" ]; do
+    file=${files%%;*}
+    trash-put "$(basename "$file")"
+    if [ "$files" = "$file" ]; then
+      files=''
+    else
+      files="${files#*;}"
+    fi
+  done
+}}
+
+cmd restore_trash ${{ 
+    trash-restore 
+}}
+cmd clear_trash %trash-empty
+
+# Bulk renaming files, requires 'vimv' 
+# curl https://raw.githubusercontent.com/thameera/vimv/master/vimv > ~/.local/bin/vimv && chmod +755 ~/.local/bin/vimv
+cmd bulk_rename $vimv 
+
+# Basic Bindings
+# Remove some defaults
+map m
+map o
+map n
+map "'"
+map '"'
+map c
+map e
+map f
+
+# Basic mappings
+map dd move_to_trash
+map tc clear_trash
+map tr restore_trash
+map DD delete
+map p paste
+map <enter> open
+map ch chmodx
+map md mkdir
+map mf mkfile
+map r rename
+map br bulk_rename
+
+# Movement
+map gdown cd ~/Downloads
+map gdoc cd ~/Documents
+map gpic cd ~/Pictures
+map gmus cd ~/Music
+map gcon cd ~/.config

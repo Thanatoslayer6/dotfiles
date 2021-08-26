@@ -1,0 +1,160 @@
+" V i m  C o n f i g
+" Conventional stuff make sure gvim is installed
+syntax on
+set nocompatible 
+filetype plugin on
+filetype indent on
+set incsearch
+set hlsearch
+set wildmenu
+set number
+set relativenumber
+set mouse=a
+set encoding=UTF-8
+set clipboard=unnamedplus
+set nowrap
+set autochdir
+set hidden
+set splitright
+set splitbelow
+set formatoptions-=ro
+
+" Change the default ~/.vim and ~/.viminfo location
+set viminfo+=n$XDG_CACHE_HOME/vim/viminfo
+set runtimepath^=$XDG_CONFIG_HOME/vim
+set runtimepath+=$XDG_DATA_HOME/vim
+set runtimepath+=$XDG_CONFIG_HOME/vim/after
+
+" No backups or swap stuff
+set nobackup
+set nowb
+set noswapfile
+
+" Use spaces instead of tabs, smart tabs, tab = 4'\s'
+set expandtab
+set smarttab
+set shiftwidth=4
+set tabstop=4 
+
+" " P R E F E R E N C E S
+" Alacritty and vim integration, need to install 'alacritty-colorscheme'
+" the base16-vim colors are inside colors dir, no need to install plugin
+if filereadable(expand("~/.vimrc_background"))
+      source ~/.vimrc_background
+endif
+
+" hi Normal guibg=NONE ctermbg=NONE
+
+"" Manual Colorscheme fix for solarized8
+"let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+"let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+"set t_Co=256
+"set termguicolors
+"colorscheme solarized8
+
+" Manual PaperColor Colorscheme
+"set t_Co=256
+"set background=dark
+"colorscheme PaperColor
+
+"Automatic day and night colorscheme, use this for manual
+":let &background = strftime("%H") < 17 ? "light" : "dark"
+
+" Remap jk for fast escape, although Ctrl+c is faster?
+inoremap jk <Esc>
+nnoremap <S-l> :tabn <cr>
+nnoremap <S-h> :tabp <cr>
+nnoremap <S-d> :tabclose <cr>
+
+" Better window navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j 
+nnoremap <C-l> <C-w>l
+nnoremap <C-k> <C-w>k
+
+" Faster copy
+nnoremap Y y$
+
+" Bind redo to `r`
+nnoremap r :redo<cr>
+
+" Moving text, uses shift key
+nnoremap K :m .-2<CR>==
+nnoremap J :m .+1<CR>==
+vnoremap K :m '<-2<CR>gv=gv
+vnoremap J :m '>+1<CR>gv=gv
+
+" Built-in Terminal, vim 8.1 and above supported
+au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+nnoremap <silent>tt :term ++rows=10<cr>
+tnoremap <silent>tt <c-\><c-n>:q!<cr>
+
+" PLUG-INS
+call plug#begin('~/.config/vim/plugged')
+  " Enhancements
+    Plug 'tpope/vim-commentary'
+    Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+    Plug 'junegunn/fzf.vim'
+    Plug 'preservim/nerdtree'
+    Plug 'sbdchd/neoformat'
+    Plug 'sbdchd/indentline.vim'
+    Plug 'jiangmiao/auto-pairs'
+  " Appearance
+    Plug 'itchyny/lightline.vim'
+    Plug 'ryanoasis/vim-devicons'
+  " Syntax
+    Plug 'ap/vim-css-color'
+    Plug 'prabirshrestha/vim-lsp'
+    Plug 'mattn/vim-lsp-settings'
+    Plug 'prabirshrestha/asyncomplete.vim'
+    Plug 'prabirshrestha/asyncomplete-lsp.vim'
+call plug#end()
+
+" fzf
+nnoremap <C-p> :Files <cr>
+
+" nerdtree
+let g:webdevicons_enable_nerdtree = 1
+let g:NERDTreeQuitOnOpen=1
+nnoremap <C-f> :NERDTreeToggle <cr>
+
+" Always open files in new tabs, remap 'enter' to 'l'
+let g:NERDTreeCustomOpenArgs={'file':{'where': 't'}}
+let g:NERDTreeMapCustomOpen      = get(g:, 'NERDTreeMapCustomOpen',      'l')
+
+" Exit Vim if NERDTree is the only window remaining in the only tab.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" Close the tab if NERDTree is the only window remaining in it.
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" lightline.vim
+set laststatus=2
+let g:lightline = {
+      \ 'colorscheme': '16color',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead',
+      \   'filetype': 'MyFiletype',
+      \   'fileformat': 'MyFileformat'
+      \ },
+      \ }
+
+function! MyFiletype()
+    return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+  endfunction
+  
+  function! MyFileformat()
+    return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
+  endfunction
+
+" neoformat
+nnoremap <F2> :Neoformat prettier <cr>
+
+" asyncomplete.vim
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"

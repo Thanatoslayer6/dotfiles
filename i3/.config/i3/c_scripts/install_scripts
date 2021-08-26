@@ -1,0 +1,14 @@
+#!/bin/bash
+# Directories, you need make and cmake installed on your system
+cpu_usage2=./cpu_usage
+playerctl_scroller=./playerctl-scroller
+
+build(){
+    #cpu_usage2
+    make -C $cpu_usage2 && make config -C $cpu_usage2
+
+    #playerctl-scroller
+    make -C $playerctl_scroller && make config -C $playerctl_scroller
+}
+
+build

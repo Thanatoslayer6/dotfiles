@@ -1,0 +1,115 @@
+#!/bin/bash
+path=$(pwd)
+declare -a apps=(
+# Appimage:[download-url] 8-23-2021, please update the links when possible
+# Separator is >
+    "Joplin > https://github.com/laurent22/joplin/releases/download/v2.3.5/Joplin-2.3.5.AppImage" 
+    "Caprine > https://github.com/sindresorhus/caprine/releases/download/v2.54.1/Caprine-2.54.1.AppImage" 
+    "Rclone Browser > https://github.com/kapitainsky/RcloneBrowser/releases/download/1.8.0/rclone-browser-1.8.0-a0b66c6-linux-x86_64.AppImage" 
+    "LibreOffice > https://libreoffice.soluzioniopen.com/stable/fresh/LibreOffice-fresh.basic-x86_64.AppImage"
+)
+apps_length=${#apps[@]}
+# Install pacman packages exported from ( pacman -Qen | awk '{print $1}' > arch_list )
+# Install important packages in yay assuming that your gpg key works ( pacman -Qm | awk '{print $1}' > aur_list )
+check_dep(){
+declare -a packages=("git" "stow" "axel")
+for pkg in ${packages[@]}; do
+    if [ -z $(command -v ${pkg}) ]; then
+        printf "%s\n" "Make sure you have stow and git installed on your system..."
+        printf "%s\n" "Missing ${pkg}, please install via 'sudo pacman -S ${pkg}'" ; exit 127
+    fi
+done
+}
+
+install_arch_packages() {
+read -rp "Install Arch packages? [Y/n] : " ans
+if [ "$ans" == "Y" ] || [ "$ans" == "y" ] || [ "$ans" == "yes" ] || [ "$ans" == "" ]; then
+    sudo pacman -S - < arch_list
+elif [ "$ans" == "N" ] || [ "$ans" == "n" ] || [ "$ans" == "no" ]; then
+    # Just return to the main screen
+    main 
+else 
+    printf "%s\n" "Error, unknown action exiting..."  ; exit 1
+fi
+}
+
+install_yay_packages() {
+read -rp "Install yay and Aur packages? [Y/n] : " ans
+if [ "$ans" == "Y" ] || [ "$ans" == "y" ] || [ "$ans" == "yes" ] || [ "$ans" == "" ]; then
+    # First we clone yay, then we compile it
+    git clone https://aur.archlinux.org/yay.git ~/yay && cd ~/yay && makepkg -si && rm -rf ~/yay/ && cd $path
+    # now we install aur packages without gpg interruptions...
+    yay -S --nopgpfetch - < aur_list
+elif [ "$ans" == "N" ] || [ "$ans" == "n" ] || [ "$ans" == "no" ]; then
+    # Just return to the main screen
+    main
+else 
+    printf "%s\n" "Error, unknown action exiting..."  ; exit 1
+fi
+}
+
+install_appimages(){
+# Creates empty directory in ~/Applications and cds into it
+mkdir -p ${HOME}/Applications && cd ~/Applications && echo "Im at $(pwd)"
+printf "%s\n" "The downloaded Appimages are located in ~/Applications
+make sure you have AUR:appimagelauncher installed for easy integration"
+
+for ((i = 0; i < ${#apps[@]}; ++i)); do
+    position=$(( $i + 1 ))
+    printf "%s - %s\n" "$position" "$(printf "${apps[$i]}" | awk -F ">" '{print $1}')"
+done
+
+read -rp "Choose the Appimages you want to download : " choice
+case "$choice" in
+    "") printf "%s\n" "You entered nothing, exiting..." ; exit 1 ;;
+    [1-$apps_length]) 
+        link="$(echo ${apps[$(( $choice - 1 ))]} | awk '{print $NF}')"
+        printf "Downloading app from -> %s\n" "$link"
+        axel "$link" || printf "Error downloading from link, please update the link..."
+        ;;
+    *) printf "%s\n" "Exiting..." ; exit 1 ;;
+    #printf "%s\n" "No option specified... exiting..." ; exit 1
+esac
+
+}
+
+stow_directories(){ 
+printf "%s\n" "Stowing config directories..."
+cd $path
+$( stow -t ~ */ ) || printf "%s\n" "Failed to stow configuration directories" ; exit 1
+}
+unstow_directories(){
+printf "%s\n" "Unstowing config directories..."
+cd $path
+$( stow -Dt ~ */ ) || printf "%s\n" "Failed to unstow configuration directories" ; exit 1
+}
+
+# Ask user for action
+main(){ 
+    declare -a options=(
+    "Install Arch packages +500"
+    "Install Aur packages"
+    "Install Appimages"
+    "Stow config directories"
+    "Unstow config directories"
+    "Exit"
+)
+for ((i = 0; i < ${#options[@]}; ++i)); do
+    position=$(( $i + 1 ))
+    echo "$position - ${options[$i]}"
+done
+read -p "Enter a number: " action
+
+case "$action" in
+    "1") install_arch_packages;;
+    "2") install_yay_packages;;
+    "3") install_appimages;;
+    "4") stow_directories;;
+    "5") unstow_directories;;
+    "6") printf "%s\n" "Exiting..." ; exit 0;;
+    *)printf "%s\n" "Please enter a proper number... Exiting " ; exit 1;;
+esac
+}
+
+# Check for dependencies first after calling the main function
+check_dep && main
