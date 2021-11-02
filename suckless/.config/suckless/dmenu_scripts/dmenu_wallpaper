@@ -1,7 +1,10 @@
 #!/bin/sh
-# Dependencies = feh and sxiv
+# Dependencies = feh, sxiv and waldl
+# Create directories needed
+mkdir -p /home/${USER}/Pictures/Default
 
 actions=(
+    "Download Wallpapers | wallhaven.cc"
     "Change Wallpaper | Temporary"
     "Change Wallpaper | Permanent"
 )
@@ -13,6 +16,9 @@ Choose(){
 }
 
 case "$Action_choice" in
+    "Download Wallpapers | wallhaven.cc")
+        waldl
+    ;;
     "Change Wallpaper | Temporary") 
         Choose 
         feh --no-fehbg --bg-fill $Chosen_wallpaper
