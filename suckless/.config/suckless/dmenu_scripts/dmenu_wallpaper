@@ -1,0 +1,32 @@
+#!/bin/sh
+# Dependencies = feh and sxiv
+
+actions=(
+    "Change Wallpaper | Temporary"
+    "Change Wallpaper | Permanent"
+)
+
+Action_choice=$(printf "%s\n" "${actions[@]}" | dmenu -i -l 3 -p "Select option: ")
+
+Choose(){
+    Chosen_wallpaper=$(sxiv -rot ~/Pictures/* | dmenu -i -l 5 -p "Choose a wallpaper: ")
+}
+
+case "$Action_choice" in
+    "Change Wallpaper | Temporary") 
+        Choose 
+        feh --no-fehbg --bg-fill $Chosen_wallpaper
+        notify-send "Temporarily changed wallpaper to $Chosen_wallpaper"
+    ;;
+    "Change Wallpaper | Permanent") 
+        Choose
+        feh --no-fehbg --bg-fill $Chosen_wallpaper
+        # Move the current wallpaper outside
+        mv /home/${USER}/Pictures/Default/* /home/${USER}/Pictures/
+        # Move the chosen wallpaper inside the Default/ Folder
+        mv $Chosen_wallpaper /home/${USER}/Pictures/Default/
+        notify-send "Permanently changed wallpaper to $Chosen_wallpaper"
+    ;;
+    *) exit 0 ;;
+esac
+

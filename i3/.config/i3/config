@@ -15,7 +15,7 @@ hide_edge_borders smart
 
 # I n i t i a l i z a t i o n
 # Wallpaper
-exec --no-startup-id feh --bg-fill /home/${USER}/Pictures/Default.png --no-fehbg
+exec --no-startup-id feh --bg-fill /home/${USER}/Pictures/Default/* --no-fehbg
 # Notification Daemon
 exec --no-startup-id dunst
 # Disk Daemon

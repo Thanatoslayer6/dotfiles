@@ -7,11 +7,16 @@ set drawbox true
 set icons true
 set ignorecase true
 
+# Insert this code block into the case statement if u use libreoffice
+#application/*document) devour ~/Applications/LibreOffice* "$f";;
+#application/*presentation) devour ~/Applications/LibreOffice* "$f";;
+
 # Open using 'xdg-open'
 cmd open ${{
     case $(file --mime-type "$f" -bL) in
         text/*|application/json) $EDITOR "$f";;
-        *) xdg-open "$f" ;;
+        image/*) devour $IMAGE "$f" || $IMAGE "$f" ;;
+        *) devour xdg-open "$f" || xdg-open "$f" ;;
     esac
 }}
 

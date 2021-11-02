@@ -1,3 +1,4 @@
+
 #!/bin/bash
 # Power - options for shutting down, reboot etc...
 # Watch - ytfzf command 
@@ -9,6 +10,7 @@ declare -a options=(
     "Screenshot"
     "Theme"
     "VirtualBox"
+    "Wallpaper"
     "Watch"
 )
 
@@ -27,6 +29,9 @@ case $choice in
     ;;
     "Radio")
     exec "$XDG_CONFIG_HOME"/suckless/dmenu_scripts/dmenu_radio
+    ;;
+    "Wallpaper")
+    exec "$XDG_CONFIG_HOME"/suckless/dmenu_scripts/dmenu_wallpaper
     ;;
     "Watch")
     ytfzf -fD
