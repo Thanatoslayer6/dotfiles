@@ -112,6 +112,8 @@ call plug#begin('~/.config/vim/plugged')
     Plug 'mattn/vim-lsp-settings'
     Plug 'prabirshrestha/asyncomplete.vim'
     Plug 'prabirshrestha/asyncomplete-lsp.vim'
+  " Programming
+    Plug 'cdelledonne/vim-cmake'
 call plug#end()
 
 " fzf
@@ -162,3 +164,6 @@ nnoremap <F2> :Neoformat prettier <cr>
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+
+" vim-cmake
+let g:cmake_link_compile_commands = 1
