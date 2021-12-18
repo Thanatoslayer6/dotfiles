@@ -1,10 +1,10 @@
 #!/bin/bash
 path=$(pwd)
 declare -a apps=(
-# Appimage:[download-url] 8-23-2021, please update the links when possible
+# Appimage:[download-url] 12-18-2021, please update the links when possible
 # Separator is >
-    "Joplin > https://github.com/laurent22/joplin/releases/download/v2.3.5/Joplin-2.3.5.AppImage" 
-    "Caprine > https://github.com/sindresorhus/caprine/releases/download/v2.54.1/Caprine-2.54.1.AppImage" 
+    "Joplin > https://github.com/laurent22/joplin/releases/download/v2.6.9/Joplin-2.6.9.AppImage" 
+    "Caprine > https://github.com/sindresorhus/caprine/releases/download/v2.55.2/Caprine-2.55.2.AppImage"
     "Rclone Browser > https://github.com/kapitainsky/RcloneBrowser/releases/download/1.8.0/rclone-browser-1.8.0-a0b66c6-linux-x86_64.AppImage" 
     "LibreOffice > https://libreoffice.soluzioniopen.com/stable/fresh/LibreOffice-fresh.basic-x86_64.AppImage"
 )
