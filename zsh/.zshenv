@@ -23,7 +23,7 @@ export TERMINFO="$XDG_DATA_HOME"/terminfo
 export TERMINFO_DIRS="$XDG_DATA_HOME"/terminfo:/usr/share/terminfo
 
 # (/run/user/1000)
-export XAUTHORITY="$XDG_RUNTIME_DIR"/Xauthority
+# export XAUTHORITY="$XDG_RUNTIME_DIR"/Xauthority
 
 # Disable history files for less
 export LESSHISTFILE=-

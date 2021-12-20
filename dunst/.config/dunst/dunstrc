@@ -3,7 +3,12 @@ title = Dunst
 class = Dunst
 monitor = 0
 follow = mouse
-geometry = "350x10-10-30"
+
+width = 350
+height = 100
+offset = 10x30
+origin = bottom-right
+
 indicate_hidden = yes
 shrink = yes
 
@@ -12,6 +17,7 @@ separator_height = 2
 padding = 8
 horizontal_padding = 8
 separator_color = "#8e8e8e"
+frame_color = "#8e8e8e"
 
 font = Anonymice Nerd Font 10
 
@@ -32,6 +38,7 @@ sticky_history = no
 history_length = 20
 always_run_script = true
 corner_radius = 0
+frame_width = 2
 icon_position = left
 max_icon_size = 48
 
@@ -42,12 +49,6 @@ browser = google-chrome-stable
 mouse_left_click = close_current
 mouse_middle_click = do_action
 mouse_right_click = close_all
-
-[shortcuts]
-close = ctrl+space
-close_all = ctrl+shift+space
-history = ctrl+Escape
-context = ctrl+shift+period
 
 [urgency_low]
     # IMPORTANT: colors have to be defined in quotation marks.
