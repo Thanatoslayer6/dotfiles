@@ -18,7 +18,7 @@ export WGETRC="$XDG_CONFIG_HOME"/wgetrc
 export VIMINIT="source ${XDG_CONFIG_HOME}/vim/vimrc"
 
 # (.local/share)
-export GNUPGHOME="$XDG_DATA_HOME"/gnupg
+# export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export TERMINFO="$XDG_DATA_HOME"/terminfo
 export TERMINFO_DIRS="$XDG_DATA_HOME"/terminfo:/usr/share/terminfo
 
