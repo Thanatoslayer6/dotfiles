@@ -103,18 +103,38 @@ call plug#begin('~/.config/vim/plugged')
     Plug 'sbdchd/neoformat'
     Plug 'sbdchd/indentline.vim'
     Plug 'jiangmiao/auto-pairs'
+    Plug 'skywind3000/asynctasks.vim'
+    Plug 'skywind3000/asyncrun.vim' 
   " Appearance
     Plug 'itchyny/lightline.vim'
     Plug 'ryanoasis/vim-devicons'
   " Syntax
     Plug 'ap/vim-css-color'
+    Plug 'sheerun/vim-polyglot'
+  " LSP
     Plug 'prabirshrestha/vim-lsp'
     Plug 'mattn/vim-lsp-settings'
+  " Completion
     Plug 'prabirshrestha/asyncomplete.vim'
     Plug 'prabirshrestha/asyncomplete-lsp.vim'
-  " Programming
+  " Snippets
+    Plug 'SirVer/ultisnips'
+    Plug 'honza/vim-snippets'
+    Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
+  " Programming (C/C++)
     Plug 'cdelledonne/vim-cmake'
 call plug#end()
+
+" ultisnips [forward: Ctrl+l, backward: Ctrl+k, expand snippet: enter]
+let g:UltiSnipsJumpForwardTrigger="<c-l>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+let g:UltiSnipsExpandTrigger = "<nop>"
+inoremap <expr> <CR> pumvisible() ? "<C-R>=UltiSnips#ExpandSnippetOrJump()<CR>" : "\<CR>"
+call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+    \ 'name': 'ultisnips',
+    \ 'allowlist': ['*'],
+    \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+    \ }))
 
 " fzf
 nnoremap <C-p> :Files <cr>
@@ -153,7 +173,7 @@ function! MyFiletype()
     return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
   endfunction
   
-  function! MyFileformat()
+function! MyFileformat()
     return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
   endfunction
 
@@ -163,7 +183,15 @@ nnoremap <F2> :Neoformat prettier <cr>
 " asyncomplete.vim
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " vim-cmake
 let g:cmake_link_compile_commands = 1
+nnoremap <F9> :CMakeBuild <cr>
+nnoremap <F10> :CMakeGenerate <cr>
+nnoremap <F11> :CMakeClean <cr>
+
+" Asynctasks.vim and Asyncrun.vim (install xterm)
+let g:asynctasks_term_pos = 'external'
+let g:asyncrun_rootmarks = ['.svn', '.git', '.root', '.bzr', '_darcs', 'build.xml', 'CMakeLists.txt', 'Makefile'] 
+nnoremap <F12> :AsyncTask project-run <cr>

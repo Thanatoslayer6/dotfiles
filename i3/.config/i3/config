@@ -167,6 +167,7 @@ bindsym $mod+Pause exec maim -sq | xclip -selection clipboard -t image/png -i &&
 # Assign apps to their workspaces
 for_window [class="VirtualBox Machine"] move to workspace $ws3
 for_window [class="Spotify"] move to workspace $ws4
+for_window [class="YouTube Music"] move to workspace $ws4
 for_window [class="projectM-pulseaudio"] move to workspace $ws4
 for_window [class="Caprine"] move to workspace $ws5
 for_window [class="Joplin"] move to workspace $ws6
