@@ -23,6 +23,7 @@ firejail
 flex
 gcc
 git
+github-cli
 gnome-themes-extra
 grub
 gvfs
@@ -79,4 +80,5 @@ xterm
 zathura
 zathura-pdf-mupdf
 zsh
+zenity
 zsh-syntax-highlighting
