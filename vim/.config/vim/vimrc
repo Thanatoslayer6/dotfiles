@@ -64,6 +64,10 @@ hi Normal guibg=NONE ctermbg=NONE
 "Automatic day and night colorscheme, use this for manual
 ":let &background = strftime("%H") < 17 ? "light" : "dark"
 
+" Change cursor styles
+let &t_SI = "\e[5 q"
+let &t_EI = "\e[2 q"
+
 " Remap jk for fast escape, although Ctrl+c is faster?
 inoremap jk <Esc>
 nnoremap <S-l> :tabn <cr>
@@ -110,7 +114,6 @@ call plug#begin('~/.config/vim/plugged')
     Plug 'ryanoasis/vim-devicons'
   " Syntax
     Plug 'ap/vim-css-color'
-    Plug 'sheerun/vim-polyglot'
   " LSP
     Plug 'prabirshrestha/vim-lsp'
     Plug 'mattn/vim-lsp-settings'
@@ -137,7 +140,15 @@ call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_opti
     \ }))
 
 " fzf
-nnoremap <C-p> :Files <cr>
+" Find root directory and execute :Files
+function! s:find_git_root()
+  return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+endfunction
+let g:fzf_action = { 'enter': 'tab split' }
+
+command! ProjectFiles execute 'Files' s:find_git_root()
+
+nnoremap <C-p> :ProjectFiles <cr>
 
 " nerdtree
 let g:webdevicons_enable_nerdtree = 1
@@ -195,3 +206,5 @@ nnoremap <F11> :CMakeClean <cr>
 let g:asynctasks_term_pos = 'external'
 let g:asyncrun_rootmarks = ['.svn', '.git', '.root', '.bzr', '_darcs', 'build.xml', 'CMakeLists.txt', 'Makefile'] 
 nnoremap <F12> :AsyncTask project-run <cr>
+
+
