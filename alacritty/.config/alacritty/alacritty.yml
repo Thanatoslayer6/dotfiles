@@ -1,5 +1,4 @@
 #ALACRITTY CONFIG
-background_opacity: 0.85
 font:
   normal:
     family: BlexMono NF
@@ -25,6 +24,7 @@ selection:
   white: '0xffffff'
 
 window:
+  opacity: 0.85
   padding:
     x: 0
     y: 0
