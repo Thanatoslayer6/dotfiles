@@ -83,6 +83,9 @@ nnoremap <C-k> <C-w>k
 " Faster copy
 nnoremap Y y$
 
+" <Ctrl-l> redraws the screen and removes any search highlighting.
+nnoremap <silent> <C-l> :nohl<CR><C-l>
+
 " Bind redo to `r`
 nnoremap r :redo<cr>
 
