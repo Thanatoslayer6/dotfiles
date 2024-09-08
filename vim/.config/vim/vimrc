@@ -1,9 +1,9 @@
-" V i m  C o n f i g
+" == VIM CONFIGURATION ==
 " Conventional stuff make sure gvim is installed
 syntax on
-set nocompatible 
 filetype plugin on
 filetype indent on
+set nocompatible 
 set incsearch
 set hlsearch
 set wildmenu
@@ -22,6 +22,9 @@ set exrc
 set secure
 set path +=../include,include
 
+" Leader key is set to SPACE
+let mapleader = " "
+
 " Change the default ~/.vim and ~/.viminfo location
 set viminfo+=n$XDG_CACHE_HOME/vim/viminfo
 set runtimepath^=$XDG_CONFIG_HOME/vim
@@ -39,31 +42,7 @@ set smarttab
 set shiftwidth=4
 set tabstop=4 
 
-" " P R E F E R E N C E S
-" Alacritty and vim integration, need to install 'alacritty-colorscheme'
-" the base16-vim colors are inside colors dir, no need to install plugin
-if filereadable(expand("~/.vimrc_background"))
-      source ~/.vimrc_background
-endif
-
-" Transparency
-hi Normal guibg=NONE ctermbg=NONE
-
-"" Manual Colorscheme fix for solarized8
-"let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-"let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-"set t_Co=256
-"set termguicolors
-"colorscheme solarized8
-
-" Manual PaperColor Colorscheme
-"set t_Co=256
-"set background=dark
-"colorscheme PaperColor
-
-"Automatic day and night colorscheme, use this for manual
-":let &background = strftime("%H") < 17 ? "light" : "dark"
-
+" == PREFERENCES ==
 " Change cursor styles
 let &t_SI = "\e[5 q"
 let &t_EI = "\e[2 q"
@@ -100,47 +79,38 @@ au BufEnter * if &buftype == 'terminal' | :startinsert | endif
 nnoremap <silent>tt :term ++rows=10<cr>
 tnoremap <silent>tt <c-\><c-n>:q!<cr>
 
-" PLUG-INS
+" == PLUG-INS ==
 call plug#begin('~/.config/vim/plugged')
   " Enhancements
     Plug 'tpope/vim-commentary'
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
     Plug 'preservim/nerdtree'
-    Plug 'sbdchd/neoformat'
     Plug 'sbdchd/indentline.vim'
     Plug 'jiangmiao/auto-pairs'
-    Plug 'skywind3000/asynctasks.vim'
-    Plug 'skywind3000/asyncrun.vim' 
+    Plug 'vimwiki/vimwiki'
   " Appearance
     Plug 'itchyny/lightline.vim'
     Plug 'ryanoasis/vim-devicons'
   " Syntax
     Plug 'ap/vim-css-color'
   " LSP
-    Plug 'prabirshrestha/vim-lsp'
-    Plug 'mattn/vim-lsp-settings'
+    Plug 'neoclide/coc.nvim', {'branch': 'release'} 
   " Completion
-    Plug 'prabirshrestha/asyncomplete.vim'
-    Plug 'prabirshrestha/asyncomplete-lsp.vim'
   " Snippets
-    Plug 'SirVer/ultisnips'
     Plug 'honza/vim-snippets'
-    Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
   " Programming (C/C++)
-    Plug 'cdelledonne/vim-cmake'
+    " Plug 'cdelledonne/vim-cmake'
+  " Sveltekit
+    " Plug 'othree/html5.vim'
+    " Plug 'pangloss/vim-javascript'
+    " Plug 'evanleck/vim-svelte', {'branch': 'main'}
 call plug#end()
 
-" ultisnips [forward: Ctrl+l, backward: Ctrl+k, expand snippet: enter]
-let g:UltiSnipsJumpForwardTrigger="<c-l>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-let g:UltiSnipsExpandTrigger = "<nop>"
-inoremap <expr> <CR> pumvisible() ? "<C-R>=UltiSnips#ExpandSnippetOrJump()<CR>" : "\<CR>"
-call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-    \ 'name': 'ultisnips',
-    \ 'allowlist': ['*'],
-    \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
-    \ }))
+" COC
+inoremap <silent><expr> <cr> coc#pum#visible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
+inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
 
 " fzf
 " Find root directory and execute :Files
@@ -186,28 +156,11 @@ let g:lightline = {
 function! MyFiletype()
     return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
   endfunction
-  
+
 function! MyFileformat()
     return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
   endfunction
 
-" neoformat
-nnoremap <F2> :Neoformat prettier <cr>
-
-" asyncomplete.vim
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
-
-" vim-cmake
-let g:cmake_link_compile_commands = 1
-nnoremap <F9> :CMakeBuild <cr>
-nnoremap <F10> :CMakeGenerate <cr>
-nnoremap <F11> :CMakeClean <cr>
-
-" Asynctasks.vim and Asyncrun.vim (install xterm)
-let g:asynctasks_term_pos = 'external'
-let g:asyncrun_rootmarks = ['.svn', '.git', '.root', '.bzr', '_darcs', 'build.xml', 'CMakeLists.txt', 'Makefile'] 
-nnoremap <F12> :AsyncTask project-run <cr>
-
-
+" vimwiki
+let g:vimwiki_list = [{'path': '~/Downloads/Notes',
+                      \ 'syntax': 'markdown', 'ext': 'md'}]

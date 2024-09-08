@@ -20,8 +20,8 @@ exec --no-startup-id feh --bg-fill /home/${USER}/Pictures/Default/* --no-fehbg
 exec --no-startup-id dunst
 # Disk Daemon
 exec --no-startup-id udiskie
-# Playerctl Daemon
-exec --no-startup-id playerctld daemon
+# X11 Compositor
+exec --no-startup-id picom
 
 # App Launcher
 bindsym Control+space exec --no-startup-id j4-dmenu-desktop
@@ -150,15 +150,10 @@ bindsym $mod+Return exec alacritty
 # Keybindings for the apps I use...
 bindsym $mod+b exec librewolf
 bindsym $mod+$alt+b exec chromium --incognito
-bindsym $mod+n exec alacritty -e sfeed_curses $XDG_CONFIG_HOME/sfeed/feeds/*
 bindsym $mod+m exec alacritty -e cmus
 
 # File Managers
-bindsym Ctrl+e exec alacritty -e lfrun
-bindsym Ctrl+$alt+e exec pcmanfm
-
-# Lock the screen using btrlockscrn
-bindsym Ctrl+$alt+l exec betterlockscreen -l
+bindsym Ctrl+$alt+e exec thunar
 
 # Screenshot, install maim, xclip and drawing. Pause = Print Screen
 bindsym Pause exec maim -sq | xclip -selection clipboard -t image/png -i

@@ -1,16 +1,16 @@
 #!/bin/bash
 path=$(pwd)
+
 declare -a apps=(
-# Appimage:[download-url] 12-18-2021, please update the links when possible
-# Separator is >
-    "Joplin > https://github.com/laurent22/joplin/releases/download/v2.6.9/Joplin-2.6.9.AppImage" 
-    "Caprine > https://github.com/sindresorhus/caprine/releases/download/v2.55.2/Caprine-2.55.2.AppImage"
+    # Appimage:[download-url] 12-18-2021, please update the links when possible
+    # Separator is >
+    "Joplin > https://github.com/laurent22/joplin/releases/download/v3.0.15/Joplin-3.0.15.AppImage" 
     "Rclone Browser > https://github.com/kapitainsky/RcloneBrowser/releases/download/1.8.0/rclone-browser-1.8.0-a0b66c6-linux-x86_64.AppImage" 
-    "Youtube Music > https://github.com/th-ch/youtube-music/releases/download/v1.14.0/YouTube-Music-1.14.0.AppImage"
-    "LibreOffice > https://libreoffice.soluzioniopen.com/stable/fresh/LibreOffice-fresh.basic-x86_64.AppImage"
-    "Libresprite > https://github.com/LibreSprite/LibreSprite/releases/download/v1.0/libresprite-Linux--x86_64.AppImage"
+    "Youtube Music > https://github.com/th-ch/youtube-music/releases/download/v3.5.2/YouTube-Music-3.5.2.AppImage"
+    "LibreSprite > https://github.com/LibreSprite/LibreSprite/releases/download/v1.0/libresprite-Linux--x86_64.AppImage"
 )
 apps_length=${#apps[@]}
+
 # Install pacman packages exported from ( pacman -Qen | awk '{print $1}' > arch_list )
 # Install important packages in yay assuming that your gpg key works ( pacman -Qm | awk '{print $1}' > aur_list )
 check_dep(){
@@ -72,7 +72,6 @@ case "$choice" in
     *) printf "%s\n" "Exiting..." ; exit 1 ;;
     #printf "%s\n" "No option specified... exiting..." ; exit 1
 esac
-
 }
 
 stow_directories(){ 

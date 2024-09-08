@@ -6,10 +6,7 @@ declare -a options=(
     "Android"
     "Power"
     "Radio"
-    "Rss Feed"
     "Screenshot"
-    "Theme"
-    "VirtualBox"
     "Wallpaper"
     "Watch"
 )
@@ -24,9 +21,6 @@ case $choice in
     "Power")
     exec "$XDG_CONFIG_HOME"/suckless/dmenu_scripts/dmenu_power
     ;;
-    "Theme")
-    exec "$XDG_CONFIG_HOME"/suckless/dmenu_scripts/dmenu_theme
-    ;;
     "Radio")
     exec "$XDG_CONFIG_HOME"/suckless/dmenu_scripts/dmenu_radio
     ;;
@@ -35,12 +29,6 @@ case $choice in
     ;;
     "Watch")
     ytfzf -fD
-    ;;
-    "Rss Feed")
-    exec "$XDG_CONFIG_HOME"/suckless/dmenu_scripts/dmenu_rss
-    ;;
-    "VirtualBox")
-    exec "$XDG_CONFIG_HOME"/suckless/dmenu_scripts/dmenu_vbox
     ;;
     "Screenshot")
     exec "$XDG_CONFIG_HOME"/suckless/dmenu_scripts/dmenu_sshot

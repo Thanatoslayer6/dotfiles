@@ -37,10 +37,8 @@ setopt autocd extendedglob nomatch menucomplete
 
 # Aliases
 alias startx='startx "$XDG_CONFIG_HOME/X11/xinitrc" -- "$XDG_CONFIG_HOME/X11/xserverrc" vt1'
-alias sfeed_update='sfeed_update "$XDG_CONFIG_HOME/sfeed/sfeedrc"'
 alias wget='wget --no-hsts'
 alias v='vim'
-alias lf='lfrun'
 alias editzsh='vim "$XDG_CONFIG_HOME/zsh/.zshrc"'
 alias editvim='vim "$XDG_CONFIG_HOME/vim/vimrc"'
 alias suck='rm -f config.h ; sudo make install'

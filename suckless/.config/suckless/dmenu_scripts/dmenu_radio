@@ -8,7 +8,7 @@ declare -a instances=(
     "Soundstorm (Electronic/Easy) - http://opml.radiotime.com/Tune.ashx?id=s113468"
     "Ambient Sleeping Pill (Easy) - http://opml.radiotime.com/Tune.ashx?id=s190314"
     "Dark Edge Radio (Indie) - http://opml.radiotime.com/Tune.ashx?id=s304142"
-    "Postrocks.me (Post rock) - http://postrocks.me:8000/listen.pls"
+    "POST ROCK (Post rock) - https://stream.laut.fm/post-rock.m3u"
     "DWWW 774 (News) - http://opml.radiotime.com/Tune.ashx?id=s167367"
     "DZRH 666 (PH News) - http://opml.radiotime.com/Tune.ashx?id=s49650"
     "103.5 K-Lite (90's & 2000s) - http://opml.radiotime.com/Tune.ashx?id=s2789"
